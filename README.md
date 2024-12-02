@@ -1,2 +1,2 @@
 # dynamic-programmers
-Are Looped Transformers Optimal Dynamic Programmers?
+Are Looped Transformers Dynamic Programmers?

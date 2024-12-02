@@ -23,7 +23,7 @@ VOCAB_SIZE=$((NUM_RANGE + 4))
 
 MODEL="LoopedGPT" # LoopedGPT, TimeDependentLoopedGPT
 LAYER=1
-LOOP=50
+LOOP=10
 
 #MODEL="GPT"
 #LAYER=12
@@ -32,7 +32,7 @@ LOOP=50
 OUTPUT_DIR=${ROOT_DIR}"/output/$(basename "$TASK")_"${COMPLEXITY}"/"${MODEL}"_"${LOOP}
 WANDB_NAME="$(basename "$TASK")_"${COMPLEXITY}"_"${MODEL}"_"${LOOP}
 
-torchrun --standalone --nproc_per_node=1 train.py\
+torchrun --standalone --nproc_per_node=2 train.py\
  --file ${DATA_DIR}\
  --folder ${TASK}\
  --output_dir ${OUTPUT_DIR}\

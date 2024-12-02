@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
-from transformers import get_scheduler, set_seed
+from transformers import get_scheduler, set_seed, get_cosine_schedule_with_warmup
 
 import wandb
 from model import GPT, LoopedGPT, TimeDependentLoopedGPT
@@ -110,9 +110,14 @@ def set_optimizer_scheduler(model):
         },
     ]
     optimizer = optim.AdamW(optimizer_grouped_parameters)
-    scheduler = get_scheduler(
-        name="linear",
-        optimizer=optimizer,
+    #scheduler = get_scheduler(
+    #    name="linear",
+    #    optimizer=optimizer,
+    #    num_warmup_steps=args.warmup,
+    #    num_training_steps=args.epoch,
+    #)
+    scheduler = get_cosine_schedule_with_warmup(
+        optimizer,
         num_warmup_steps=args.warmup,
         num_training_steps=args.epoch,
     )
