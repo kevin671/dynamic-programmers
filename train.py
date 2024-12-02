@@ -5,11 +5,12 @@ import torch
 import torch.distributed as dist
 import torch.nn as nn
 import torch.optim as optim
-import wandb
-from model import GPT, LoopedGPT, TimeDependentLoopedGPT
 from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
 from transformers import get_scheduler, set_seed
+
+import wandb
+from model import GPT, LoopedGPT, TimeDependentLoopedGPT
 
 
 def evaluate(cur_loader, max_iter=None):
@@ -183,6 +184,8 @@ for epoch in range(args.epoch):
         if dist.get_rank() == main_process:
             if data_iter_step % 100 == 0:
                 wandb.log({"loss": loss.item()})
+                # also learn rate
+                wandb.log({"lr": scheduler.get_last_lr()[0]})
                 if not args.write2file:
                     pbar.set_description(f"epoch:{epoch}")
 

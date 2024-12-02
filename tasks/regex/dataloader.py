@@ -6,22 +6,20 @@ from torch.utils.data import DataLoader
 class MyDataSet(Data.Dataset):
     def __init__(self, args, control):
         num_range = args.num_range
-        dictionary = {"<pad>": 0, "<sep>": 1, "<eos>": 2, "|": 3}
+        dictionary = {"<pad>": 0, "<sep>": 1, "<eos>": 2, "|": 3, "*": 4, ".": 5, "0": 6, "1": 7}
         alphabet = "abcdefghijklmnopqrstuvwxyz"
         for i in range(26):
-            dictionary[alphabet[i]] = i + 4
-        for i in range(num_range):
-            dictionary[str(i)] = i + 30
+            dictionary[alphabet[i]] = i + 7 + 2
         debug_size = 100
 
-        file_name = args.file
+        file_name = args.file + "/decoder/" if not args.chain else args.file + "/chain/"
         if control == 0:
-            with open(f"{file_name}/train_data.txt", "r") as f:
+            with open(f"{file_name}train_data.txt", "r") as f:
                 self.X = f.read().splitlines()
                 if args.debug:
                     self.X = self.X[:debug_size]
         elif control == 1:
-            with open(f"{file_name}/test_data.txt", "r") as f:
+            with open(f"{file_name}test_data.txt", "r") as f:
                 self.X = f.read().splitlines()
                 if args.debug:
                     self.X = self.X[:debug_size]
@@ -60,10 +58,7 @@ class MyDataSet(Data.Dataset):
 def getLoader(args):
     number = 2
     datasets = [MyDataSet(args, i) for i in range(number)]
-    samplers = [
-        torch.utils.data.distributed.DistributedSampler(datasets[i])
-        for i in range(number)
-    ]
+    samplers = [torch.utils.data.distributed.DistributedSampler(datasets[i]) for i in range(number)]
     dataloaders = [
         DataLoader(
             datasets[i],

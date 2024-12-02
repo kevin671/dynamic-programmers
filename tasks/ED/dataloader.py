@@ -16,12 +16,12 @@ class MyDataSet(Data.Dataset):
 
         file_name = args.file
         if control == 0:
-            with open(f"{file_name}train_data.txt", "r") as f:
+            with open(f"{file_name}/train_data.txt", "r") as f:
                 self.X = f.read().splitlines()
                 if args.debug:
                     self.X = self.X[:debug_size]
         elif control == 1:
-            with open(f"{file_name}test_data.txt", "r") as f:
+            with open(f"{file_name}/test_data.txt", "r") as f:
                 self.X = f.read().splitlines()
                 if args.debug:
                     self.X = self.X[:debug_size]
