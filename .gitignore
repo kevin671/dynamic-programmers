@@ -1,0 +1,10 @@
+tasks/arithmetic
+tasks/equation
+*.txt
+wisteria*
+wandb
+output
+data
+__pycache__
+.d*
+artifacts
